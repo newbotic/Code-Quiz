@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
   var timerSpan = document.getElementById("time");
   var feedbackDiv = document.getElementById("feedback");
   var finalScoreSpan = document.getElementById("final-score");
+
   var timerInterval;
 
   startButton.addEventListener("click", function () {
@@ -74,13 +75,16 @@ document.addEventListener("DOMContentLoaded", function () {
     currentQuestionIndex++;
 
     // Check if there are more questions
-    // if (currentQuestionIndex < questions.length) {
-    displayQuestion();
-    // } else {
-    // No more questions, display the end screen
-    //     showEndScreen();
-    //     stopTimer();
-    //   }
+    if (currentQuestionIndex < questions.length) {
+      displayQuestion();
+    } else {
+      // No more questions, display the end screen
+      showEndScreen();
+      stopTimer();
+      // hide start-screen
+      var startScreen = document.getElementById("start-screen");
+      startScreen.classList.add("hide");
+    }
   }
 
   // -------------------------------------------------------
@@ -144,3 +148,34 @@ document.addEventListener("DOMContentLoaded", function () {
     startTimer(newSeconds);
   }
 });
+
+// ------------------------------------------
+var initialsInput = document.getElementById("initials");  
+var submitButton = document.getElementById("submit");  
+var feedbackDiv = document.getElementById("feedback");
+var timerSpan = document.getElementById("time");
+
+
+submitButton.addEventListener("click", function () {
+
+  
+  // Check if initials are provided
+
+  var initials = initialsInput.value.trim();
+  if (initials !== "") {
+    // Create a new object with initials and the final score
+    var scoreData = {
+      initials: initials,
+      score: parseInt(timerSpan.textContent)
+    }
+    }
+  });
+
+
+   // Add the new score data
+    existingScores.push(scoreData);
+
+
+    // Save the updated scores to local storage 
+   localStorage.setItem("highscores", JSON.stringify(existingScores));
+
