@@ -12,6 +12,10 @@ document.addEventListener("DOMContentLoaded", function () {
   var submitButton = document.getElementById("submit");
 
   var existingScores = JSON.parse(localStorage.getItem("highscores")) || [];
+  
+  // Adding audio elements
+  var correctSound = new Audio("./assets/sfx/correct.wav");  // Underlined
+  var incorrectSound = new Audio("./assets/sfx/incorrect.wav");  // Underlined
 
 
   var currentQuestionIndex = 0;
@@ -82,6 +86,7 @@ document.addEventListener("DOMContentLoaded", function () {
           if (isCorrect) {
             feedbackDiv.classList.remove("hide");
             feedbackDiv.textContent = "Correct!";
+            playAudio(correctSound);
           }
   
           displayNextQuestion();
@@ -166,12 +171,19 @@ document.addEventListener("DOMContentLoaded", function () {
       // Display feedback before restarting the timer
   feedbackDiv.classList.remove("hide");
   feedbackDiv.textContent = "Wrong!";
+  playAudio(incorrectSound); 
 
 
     // Restart the timer with the new time
     startTimer(newSeconds);
   }
 });
+
+// Play audio function
+function playAudio(audioElement) {
+  if (audioElement) {
+    audioElement.play();
+  }}
 
 // ------------------------------------------
 var initialsInput = document.getElementById("initials");  
