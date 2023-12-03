@@ -4,15 +4,23 @@ document.addEventListener("DOMContentLoaded", function () {
   var timerSpan = document.getElementById("time");
   var feedbackDiv = document.getElementById("feedback");
   var finalScoreSpan = document.getElementById("final-score");
+  var initialsInput = document.getElementById("initials");
+  var submitButton = document.getElementById("submit");
 
   var timerInterval;
+  var initialsInput = document.getElementById("initials");
+  var submitButton = document.getElementById("submit");
+
+  var existingScores = JSON.parse(localStorage.getItem("highscores")) || [];
+
+
+  var currentQuestionIndex = 0;
+  var totalSeconds = 0;
+  // ------------------
 
   startButton.addEventListener("click", function () {
     startQuiz();
   });
-
-  var currentQuestionIndex = 0;
-  var totalSeconds = 0;
 
   function startQuiz() {
     var startScreen = document.getElementById("start-screen");
@@ -156,26 +164,25 @@ var feedbackDiv = document.getElementById("feedback");
 var timerSpan = document.getElementById("time");
 
 
+
 submitButton.addEventListener("click", function () {
-
-  
-  // Check if initials are provided
-
   var initials = initialsInput.value.trim();
   if (initials !== "") {
-    // Create a new object with initials and the final score
     var scoreData = {
       initials: initials,
       score: parseInt(timerSpan.textContent)
-    }
-    }
-  });
+    };
+    var existingScores = JSON.parse(localStorage.getItem("highscores")) || [];
 
-
-   // Add the new score data
     existingScores.push(scoreData);
 
+    // Sort the scores by score value (from high to low)
+    existingScores.sort((a, b) => b.score - a.score);
 
-    // Save the updated scores to local storage 
-   localStorage.setItem("highscores", JSON.stringify(existingScores));
+    // Save the updated scores to local storage
+    localStorage.setItem("highscores", JSON.stringify(existingScores));
 
+    // Use relative path for redirection
+    window.location.href = "./highscores.html";
+  }
+});
