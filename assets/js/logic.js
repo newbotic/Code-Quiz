@@ -36,46 +36,6 @@ document.addEventListener("DOMContentLoaded", function () {
   }
   // display question function
 
-  function displayQuestion() {
-    if (currentQuestionIndex < questions.length) {
-      var currentQuestion = questions[currentQuestionIndex];
-
-      var questionTitle = document.getElementById("question-title");
-      questionTitle.textContent = currentQuestion.question;
-
-      var choicesDiv = document.getElementById("choices");
-      choicesDiv.innerHTML = "";
-
-      currentQuestion.answers.forEach(function (answer, index) {
-        var choiceButton = document.createElement("button");
-
-        choiceButton.textContent = index + 1 + ". " + answer;
-
-        choiceButton.addEventListener("mouseover", function () {
-          feedbackDiv.classList.add("hide");
-        });
-
-        choiceButton.addEventListener("click", function () {
-          var isCorrect = checkAnswer(currentQuestion, index);
-
-          if (isCorrect) {
-            feedbackDiv.classList.remove("hide");
-            feedbackDiv.textContent = "Correct!";
-          } else {
-            feedbackDiv.textContent = "Wrong!";
-            subtractTime(15);
-          }
-
-          displayNextQuestion();
-        });
-
-        choicesDiv.appendChild(choiceButton);
-      });
-    } else {
-      showEndScreen();
-      stopTimer();
-    }
-  }
 
   // -----------------------------------------------
 
@@ -95,6 +55,46 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
+
+  // ---------------------------display questions
+  function displayQuestion() {
+    if (currentQuestionIndex < questions.length) {
+      var currentQuestion = questions[currentQuestionIndex];
+  
+      var questionTitle = document.getElementById("question-title");
+      questionTitle.textContent = currentQuestion.question;
+  
+      var choicesDiv = document.getElementById("choices");
+      choicesDiv.innerHTML = "";
+  
+      currentQuestion.answers.forEach(function (answer, index) {
+        var choiceButton = document.createElement("button");
+  
+        choiceButton.textContent = index + 1 + ". " + answer;
+  
+        choiceButton.addEventListener("mouseover", function () {
+          feedbackDiv.classList.add("hide");
+        });
+  
+        choiceButton.addEventListener("click", function () {
+          var isCorrect = checkAnswer(currentQuestion, index);
+  
+          if (isCorrect) {
+            feedbackDiv.classList.remove("hide");
+            feedbackDiv.textContent = "Correct!";
+          }
+  
+          displayNextQuestion();
+        });
+  
+        choicesDiv.appendChild(choiceButton);
+      });
+    } else {
+      showEndScreen();
+      stopTimer();
+    }
+  }
+  
   // -------------------------------------------------------
   function showEndScreen() {
     var endScreen = document.getElementById("end-screen");
@@ -138,8 +138,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function checkAnswer(question, selectedAnswerIndex) {
     var correctAnswerIndex = 0;
-    return selectedAnswerIndex === correctAnswerIndex;
+    var isCorrect = selectedAnswerIndex === correctAnswerIndex;
+  
+    // Display "Wrong!" feedback for incorrect answers
+    if (!isCorrect) {
+      feedbackDiv.classList.remove("hide");
+      feedbackDiv.textContent = "Wrong!";
+      subtractTime(15); // Subtract 15 seconds for incorrect answers
+    }
+  
+    return isCorrect;
   }
+  
+
 
   function subtractTime(seconds) {
     // Subtract the specified seconds from the timer
@@ -151,6 +162,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Update the totalSeconds with the subtracted time
     totalSeconds += seconds;
+
+      // Display feedback before restarting the timer
+  feedbackDiv.classList.remove("hide");
+  feedbackDiv.textContent = "Wrong!";
+
 
     // Restart the timer with the new time
     startTimer(newSeconds);
