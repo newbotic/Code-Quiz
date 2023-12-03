@@ -14,8 +14,8 @@ document.addEventListener("DOMContentLoaded", function () {
   var existingScores = JSON.parse(localStorage.getItem("highscores")) || [];
   
   // Adding audio elements
-  var correctSound = new Audio("./assets/sfx/correct.wav");  // Underlined
-  var incorrectSound = new Audio("./assets/sfx/incorrect.wav");  // Underlined
+  var correctSound = new Audio("./assets/sfx/correct.wav");  
+  var incorrectSound = new Audio("./assets/sfx/incorrect.wav");  
 
 
   var currentQuestionIndex = 0;
