@@ -4,15 +4,23 @@ document.addEventListener("DOMContentLoaded", function () {
   var timerSpan = document.getElementById("time");
   var feedbackDiv = document.getElementById("feedback");
   var finalScoreSpan = document.getElementById("final-score");
+  var initialsInput = document.getElementById("initials");
+  var submitButton = document.getElementById("submit");
 
   var timerInterval;
+  var initialsInput = document.getElementById("initials");
+  var submitButton = document.getElementById("submit");
+
+  var existingScores = JSON.parse(localStorage.getItem("highscores")) || [];
+
+
+  var currentQuestionIndex = 0;
+  var totalSeconds = 0;
+  // ------------------
 
   startButton.addEventListener("click", function () {
     startQuiz();
   });
-
-  var currentQuestionIndex = 0;
-  var totalSeconds = 0;
 
   function startQuiz() {
     var startScreen = document.getElementById("start-screen");
@@ -28,46 +36,6 @@ document.addEventListener("DOMContentLoaded", function () {
   }
   // display question function
 
-  function displayQuestion() {
-    if (currentQuestionIndex < questions.length) {
-      var currentQuestion = questions[currentQuestionIndex];
-
-      var questionTitle = document.getElementById("question-title");
-      questionTitle.textContent = currentQuestion.question;
-
-      var choicesDiv = document.getElementById("choices");
-      choicesDiv.innerHTML = "";
-
-      currentQuestion.answers.forEach(function (answer, index) {
-        var choiceButton = document.createElement("button");
-
-        choiceButton.textContent = index + 1 + ". " + answer;
-
-        choiceButton.addEventListener("mouseover", function () {
-          feedbackDiv.classList.add("hide");
-        });
-
-        choiceButton.addEventListener("click", function () {
-          var isCorrect = checkAnswer(currentQuestion, index);
-
-          if (isCorrect) {
-            feedbackDiv.classList.remove("hide");
-            feedbackDiv.textContent = "Correct!";
-          } else {
-            feedbackDiv.textContent = "Wrong!";
-            subtractTime(15);
-          }
-
-          displayNextQuestion();
-        });
-
-        choicesDiv.appendChild(choiceButton);
-      });
-    } else {
-      showEndScreen();
-      stopTimer();
-    }
-  }
 
   // -----------------------------------------------
 
@@ -87,6 +55,46 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
+
+  // ---------------------------display questions
+  function displayQuestion() {
+    if (currentQuestionIndex < questions.length) {
+      var currentQuestion = questions[currentQuestionIndex];
+  
+      var questionTitle = document.getElementById("question-title");
+      questionTitle.textContent = currentQuestion.question;
+  
+      var choicesDiv = document.getElementById("choices");
+      choicesDiv.innerHTML = "";
+  
+      currentQuestion.answers.forEach(function (answer, index) {
+        var choiceButton = document.createElement("button");
+  
+        choiceButton.textContent = index + 1 + ". " + answer;
+  
+        choiceButton.addEventListener("mouseover", function () {
+          feedbackDiv.classList.add("hide");
+        });
+  
+        choiceButton.addEventListener("click", function () {
+          var isCorrect = checkAnswer(currentQuestion, index);
+  
+          if (isCorrect) {
+            feedbackDiv.classList.remove("hide");
+            feedbackDiv.textContent = "Correct!";
+          }
+  
+          displayNextQuestion();
+        });
+  
+        choicesDiv.appendChild(choiceButton);
+      });
+    } else {
+      showEndScreen();
+      stopTimer();
+    }
+  }
+  
   // -------------------------------------------------------
   function showEndScreen() {
     var endScreen = document.getElementById("end-screen");
@@ -130,8 +138,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function checkAnswer(question, selectedAnswerIndex) {
     var correctAnswerIndex = 0;
-    return selectedAnswerIndex === correctAnswerIndex;
+    var isCorrect = selectedAnswerIndex === correctAnswerIndex;
+  
+    // Display "Wrong!" feedback for incorrect answers
+    if (!isCorrect) {
+      feedbackDiv.classList.remove("hide");
+      feedbackDiv.textContent = "Wrong!";
+      subtractTime(15); // Subtract 15 seconds for incorrect answers
+    }
+  
+    return isCorrect;
   }
+  
+
 
   function subtractTime(seconds) {
     // Subtract the specified seconds from the timer
@@ -143,6 +162,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Update the totalSeconds with the subtracted time
     totalSeconds += seconds;
+
+      // Display feedback before restarting the timer
+  feedbackDiv.classList.remove("hide");
+  feedbackDiv.textContent = "Wrong!";
+
 
     // Restart the timer with the new time
     startTimer(newSeconds);
@@ -156,26 +180,25 @@ var feedbackDiv = document.getElementById("feedback");
 var timerSpan = document.getElementById("time");
 
 
+
 submitButton.addEventListener("click", function () {
-
-  
-  // Check if initials are provided
-
   var initials = initialsInput.value.trim();
   if (initials !== "") {
-    // Create a new object with initials and the final score
     var scoreData = {
       initials: initials,
       score: parseInt(timerSpan.textContent)
-    }
-    }
-  });
+    };
+    var existingScores = JSON.parse(localStorage.getItem("highscores")) || [];
 
-
-   // Add the new score data
     existingScores.push(scoreData);
 
+    // Sort the scores by score value (from high to low)
+    existingScores.sort((a, b) => b.score - a.score);
 
-    // Save the updated scores to local storage 
-   localStorage.setItem("highscores", JSON.stringify(existingScores));
+    // Save the updated scores to local storage
+    localStorage.setItem("highscores", JSON.stringify(existingScores));
 
+    // Use relative path for redirection
+    window.location.href = "./highscores.html";
+  }
+});
