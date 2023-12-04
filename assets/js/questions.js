@@ -51,4 +51,3 @@ var questions = [
   },
 ];
 
-//   console.log(questions[0].answers);
