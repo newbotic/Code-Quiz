@@ -2,7 +2,7 @@ var startButton = document.getElementById("start");
 
 // add event listener
 
-startButton.addEventListener("click", function() {
+startButton.addEventListener("click", function () {
   startQuiz();
 });
 
@@ -50,4 +50,3 @@ var questions = [
     correctAnswer: 0,
   },
 ];
-
