@@ -140,8 +140,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         totalSeconds = initialSeconds - seconds;
 
-        
-        
         if (seconds <= 0) {
           console.log("removing interval");
 
@@ -175,7 +173,6 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function subtractTime(seconds) {
-
     // Subtract the specified seconds from the timer
 
     var currentSeconds = parseInt(timerSpan.textContent);
@@ -209,7 +206,6 @@ function playAudio(audioElement) {
   }
 }
 
-
 var initialsInput = document.getElementById("initials");
 var submitButton = document.getElementById("submit");
 var feedbackDiv = document.getElementById("feedback");
@@ -230,7 +226,7 @@ submitButton.addEventListener("click", function () {
     existingScores.push(scoreData);
 
     // Sort the scores by score value (from high to low)
-    
+
     existingScores.sort((a, b) => b.score - a.score);
 
     // Save the updated scores to local storage

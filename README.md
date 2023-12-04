@@ -1,6 +1,6 @@
 # Quiz Application
 
-Welcome to the Quiz Application repository! 
+Welcome to the Quiz Application repository!
 
 ## Table of content
 
@@ -15,11 +15,9 @@ Welcome to the Quiz Application repository!
 [Features](#Features)
 [Contributing](#contributing)
 
-
 ## About
 
 This basic online quiz lets users answer multiple-choice questions and get feedback on how they're doing. The quiz has a timer to keep track of time and a scoring system to evaluate performance. It's built using JavaScript and works in a web browser. The appearance of the quiz is designed to be simple, neat, and easy to use, with the JavaScript code handling dynamic updates to the HTML and CSS for a smooth and responsive user interface.
-
 
 ## Screenshot
 
@@ -45,7 +43,7 @@ Code editor (optional)
 ### Installation
 
 1. Clone the repository:
-git@github.com:newbotic/Code-Quiz.git
+   git@github.com:newbotic/Code-Quiz.git
 
 2. Open the index.html file in your web browser.
 
