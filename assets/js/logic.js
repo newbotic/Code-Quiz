@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
+  //DOM ready for manipulation
   var startButton = document.getElementById("start");
   var questionsDiv = document.getElementById("questions");
   var timerSpan = document.getElementById("time");
@@ -6,40 +7,45 @@ document.addEventListener("DOMContentLoaded", function () {
   var finalScoreSpan = document.getElementById("final-score");
   var initialsInput = document.getElementById("initials");
   var submitButton = document.getElementById("submit");
-
   var timerInterval;
   var initialsInput = document.getElementById("initials");
   var submitButton = document.getElementById("submit");
 
-  var existingScores = JSON.parse(localStorage.getItem("highscores")) || [];
-  
-  // Adding audio elements
-  var correctSound = new Audio("./assets/sfx/correct.wav");  
-  var incorrectSound = new Audio("./assets/sfx/incorrect.wav");  
 
+  // Retrieving data (JSON formatted string)from localStorage and parsing as JSON (object)
+
+  var existingScores = JSON.parse(localStorage.getItem("highscores")) || [];//if local storage null use empty array default value
+
+  // Adding audio elements
+
+  var correctSound = new Audio("./assets/sfx/correct.wav");
+  var incorrectSound = new Audio("./assets/sfx/incorrect.wav");
 
   var currentQuestionIndex = 0;
   var totalSeconds = 0;
-  // ------------------
+  
+  // add event listener to id Start Quiz button
 
   startButton.addEventListener("click", function () {
     startQuiz();
   });
 
+//startQuiz function
+
   function startQuiz() {
-    var startScreen = document.getElementById("start-screen");
-    startScreen.classList.add("hide");
+    var startScreen = document.getElementById("start-screen");//find id start-screen
+    startScreen.classList.add("hide");//use classList method to add hide class
+    questionsDiv.classList.remove("hide");//use classList method to remove hide class
 
-    questionsDiv.classList.remove("hide");
+    // Call displayQuestion function
 
-    // Display the first question
     displayQuestion();
 
-    // Start the timer at 75 seconds
+    // Invoke StartTimer function and passing 75 seconds as argument
+    
     startTimer(75);
   }
   // display question function
-
 
   // -----------------------------------------------
 
@@ -59,39 +65,38 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-
   // ---------------------------display questions
   function displayQuestion() {
     if (currentQuestionIndex < questions.length) {
       var currentQuestion = questions[currentQuestionIndex];
-  
+
       var questionTitle = document.getElementById("question-title");
       questionTitle.textContent = currentQuestion.question;
-  
+
       var choicesDiv = document.getElementById("choices");
       choicesDiv.innerHTML = "";
-  
+
       currentQuestion.answers.forEach(function (answer, index) {
         var choiceButton = document.createElement("button");
-  
+
         choiceButton.textContent = index + 1 + ". " + answer;
-  
+
         choiceButton.addEventListener("mouseover", function () {
           feedbackDiv.classList.add("hide");
         });
-  
+
         choiceButton.addEventListener("click", function () {
           var isCorrect = checkAnswer(currentQuestion, index);
-  
+
           if (isCorrect) {
             feedbackDiv.classList.remove("hide");
             feedbackDiv.textContent = "Correct!";
             playAudio(correctSound);
           }
-  
+
           displayNextQuestion();
         });
-  
+
         choicesDiv.appendChild(choiceButton);
       });
     } else {
@@ -99,7 +104,7 @@ document.addEventListener("DOMContentLoaded", function () {
       stopTimer();
     }
   }
-  
+
   // -------------------------------------------------------
   function showEndScreen() {
     var endScreen = document.getElementById("end-screen");
@@ -144,18 +149,16 @@ document.addEventListener("DOMContentLoaded", function () {
   function checkAnswer(question, selectedAnswerIndex) {
     var correctAnswerIndex = 0;
     var isCorrect = selectedAnswerIndex === correctAnswerIndex;
-  
+
     // Display "Wrong!" feedback for incorrect answers
     if (!isCorrect) {
       feedbackDiv.classList.remove("hide");
       feedbackDiv.textContent = "Wrong!";
       subtractTime(15); // Subtract 15 seconds for incorrect answers
     }
-  
+
     return isCorrect;
   }
-  
-
 
   function subtractTime(seconds) {
     // Subtract the specified seconds from the timer
@@ -168,11 +171,10 @@ document.addEventListener("DOMContentLoaded", function () {
     // Update the totalSeconds with the subtracted time
     totalSeconds += seconds;
 
-      // Display feedback before restarting the timer
-  feedbackDiv.classList.remove("hide");
-  feedbackDiv.textContent = "Wrong!";
-  playAudio(incorrectSound); 
-
+    // Display feedback before restarting the timer
+    feedbackDiv.classList.remove("hide");
+    feedbackDiv.textContent = "Wrong!";
+    playAudio(incorrectSound);
 
     // Restart the timer with the new time
     startTimer(newSeconds);
@@ -183,22 +185,21 @@ document.addEventListener("DOMContentLoaded", function () {
 function playAudio(audioElement) {
   if (audioElement) {
     audioElement.play();
-  }}
+  }
+}
 
 // ------------------------------------------
-var initialsInput = document.getElementById("initials");  
-var submitButton = document.getElementById("submit");  
+var initialsInput = document.getElementById("initials");
+var submitButton = document.getElementById("submit");
 var feedbackDiv = document.getElementById("feedback");
 var timerSpan = document.getElementById("time");
-
-
 
 submitButton.addEventListener("click", function () {
   var initials = initialsInput.value.trim();
   if (initials !== "") {
     var scoreData = {
       initials: initials,
-      score: parseInt(timerSpan.textContent)
+      score: parseInt(timerSpan.textContent),
     };
     var existingScores = JSON.parse(localStorage.getItem("highscores")) || [];
 
